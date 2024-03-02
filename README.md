@@ -1,0 +1,2 @@
+# strengthgen
+strength-gen
