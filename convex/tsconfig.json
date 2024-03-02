@@ -19,6 +19,6 @@
     "skipLibCheck": true,
     "noEmit": true,
   },
-  "include": ["./**/*"],
+  "include": ["./**/*", "../../convex/programs.ts"],
   "exclude": ["./_generated"]
 }
