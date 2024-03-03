@@ -39,24 +39,38 @@ export default function DashboardHomePage({}) {
     const goals = ['Increase strength', 'Lose weight', 'Hypertrophy']
     const experience = ['Beginner', 'Intermediate', 'Advanced']
 
-    const [formSuccess, setFormSuccess] = useState(false)
+    const [formSuccess, setFormSuccess] = useState(true)
     const [formSuccessMessage, setFormSuccessMessage] = useState("")
 
     const formSchema = z.object({
-        name: z.string().min(2, {
-          message: "Name Should at least have 2 characters",
+        gender: z.string(),
+        age: z.string(),
+        days: z.string().min(1, {
+            message: "Please tell us how many days per week you want to workout",
         }),
+        goals: z.string().min(2, {
+            message: "Please tell us what you want to achieve",
+        }),
+        experience: z.string().min(2, {
+            message: "Please tell us your experience level",
+        }),
+        bodyweight: z.boolean(),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            gender: "",
+            days: "",
+            age: "18",
+            goals: "",
+            experience: "",
+            bodyweight: false
         },
     })
    
     function onSubmit(values: z.infer<typeof formSchema>) {
-    
+        setFormSuccess(true)
         console.log(values)
     }
 
@@ -73,10 +87,14 @@ export default function DashboardHomePage({}) {
 
         options.forEach(element => {
             elements.push(
-                <div key={element} className="flex items-center space-x-2 mt-2">
-                    <RadioGroupItem value={element} id={element} />
-                    <Label htmlFor={element}>{element}</Label>
-                </div>
+                <FormItem key={element} className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                        <RadioGroupItem value={element} id={element} />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                        {element}
+                    </FormLabel>
+                </FormItem>
             );
         });
         
@@ -84,7 +102,7 @@ export default function DashboardHomePage({}) {
     }
 
     return (
-        <main className="flex min-h-screen flex-col items-center gap-10 p-24">
+        <div className="flex min-h-screen flex-col items-center gap-10 p-24">
             {formSuccess ?
                 <div>
                     {formSuccessMessage}
@@ -104,80 +122,142 @@ export default function DashboardHomePage({}) {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col mt-1 gap-1">
+                                <FormField
+                                    control={form.control}
+                                    name="age"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>How old are you?</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your age" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                { createSelectElements(14, 90, '') }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormDescription>
+                                            You can manage email addresses in your{" "}
+                                            <Link href="/examples/forms">email settings</Link>.
+                                        </FormDescription>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-1 gap-1">
                                     <FormField 
                                         control={form.control}
-                                        name="name"
+                                        name="gender"
                                         render={({ field }) => (
-                                            <FormItem>
-                                            <FormLabel>name</FormLabel>
+                                        <FormItem>
+                                            <FormLabel>How can we best describe you?</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="John Doe" {...field} />
+                                                <RadioGroup id="gender"   
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}>
+                                                    { createRadioElements(genders) }
+                                                </RadioGroup>
                                             </FormControl>
-                                            <FormDescription>
-                                                This is your public display name.
-                                            </FormDescription>
                                             <FormMessage />
-                                            </FormItem>
+                                        </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-4 gap-1">
+                                    <FormField
+                                    control={form.control}
+                                    name="days"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>How many days a week would you want to workout?</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select amount of days" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                { createSelectElements(1, 7, ' Days / week') }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormDescription>
+                                            Select an amount that will fit your weekly schedule. The most important part for achieving goals is having a program that you can keep sticking to.
+                                        </FormDescription>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-1 gap-1">
+                                    <FormField 
+                                        control={form.control}
+                                        name="goals"
+                                        render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>What do you want to achieve?</FormLabel>
+                                            <FormControl>
+                                                <RadioGroup id="goals"   
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}>
+                                                    { createRadioElements(goals) }
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
                                         )}
                                     />
                                 </div>
                                 <div className="flex flex-col mt-1 gap-1">
-                                    <Label htmlFor="age">How old are you</Label>
-                                    <Select>
-                                        <SelectTrigger id="age">
-                                            <SelectValue placeholder="Select" />
-                                        </SelectTrigger>
-                                        <SelectContent position="popper">
-                                            { createSelectElements(14, 90, '') }
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="flex flex-col mt-1 gap-1">
-                                    <Label htmlFor="gender">Tell us which gender you are</Label>
-                                    <RadioGroup id="gender">
-                                        { createRadioElements(genders) }
-                                    </RadioGroup>
-                                </div>
-                                <div className="flex flex-col mt-4 gap-1">
-                                    <Label htmlFor="days">How many days a week would you want to workout</Label>
-                                    <Select>
-                                        <SelectTrigger id="days">
-                                            <SelectValue placeholder="Select" />
-                                        </SelectTrigger>
-                                        <SelectContent position="popper">
-                                            { createSelectElements(1, 7, ' Days / week') }
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="flex flex-col mt-1 gap-1">
-                                    <Label htmlFor="goals">Tell us which gender you are</Label>
-                                    <RadioGroup id="goals">
-                                        { createRadioElements(goals) }
-                                    </RadioGroup>
-                                </div>
-                                <div className="flex flex-col mt-1 gap-1">
-                                    <Label htmlFor="experience">Tell us how experienced you are</Label>
-                                    <RadioGroup id="experience">
-                                        { createRadioElements(experience) }
-                                    </RadioGroup>
+                                    <FormField 
+                                        control={form.control}
+                                        name="experience"
+                                        render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Tell us how experienced you are!</FormLabel>
+                                            <FormControl>
+                                                <RadioGroup id="experience"   
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}>
+                                                    { createRadioElements(experience) }
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                        )}
+                                    />
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Checkbox id="bodyweight" />
-                                    <label
-                                        htmlFor="bodyweight"
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    >
-                                        Only bodyweight exercises?
-                                    </label>
+                                    <FormField
+                                        control={form.control}
+                                        name="bodyweight"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                                            <FormControl>
+                                                <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                />
+                                            </FormControl>
+                                            <div className="space-y-1 leading-none">
+                                                <FormLabel>
+                                                    Only bodyweight exercises?
+                                                </FormLabel>
+                                                <FormDescription>
+                                                    When this is checked, we will only suggest exercises that don't use free weights or machines. This way you can have a schedule even if you don't have a gym nearby!
+                                                </FormDescription>
+                                            </div>
+                                            </FormItem>
+                                        )}
+                                        />
                                 </div>
                             </div>
+                            <Button type="submit">Submit</Button>
                         </form>
                     </Form>
                     </CardContent>
-                    <CardFooter className="flex justify-between">
-                        <Button variant="outline">Cancel</Button>
-                        <Button>Deploy</Button>
-                    </CardFooter>
                 </Card>
             }
 
@@ -186,6 +266,6 @@ export default function DashboardHomePage({}) {
                     Go to your generated programs
                 </Link>
             </Button>
-        </main>
+        </div>
     );
 }
