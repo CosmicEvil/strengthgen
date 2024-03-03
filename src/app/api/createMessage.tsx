@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function createMessage(
+export async function getSchedule(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
