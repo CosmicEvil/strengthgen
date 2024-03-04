@@ -1,4 +1,3 @@
-import { query, mutation } from "./_generated/server";
 import {queryWithUser, mutationWithUser} from "./utils"
 import { v } from 'convex/values';
 

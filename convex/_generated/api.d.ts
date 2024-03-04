@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as openai from "../openai.js";
 import type * as programs from "../programs.js";
 import type * as utils from "../utils.js";
 
@@ -26,6 +27,7 @@ import type * as utils from "../utils.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  openai: typeof openai;
   programs: typeof programs;
   utils: typeof utils;
 }>;

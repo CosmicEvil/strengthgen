@@ -2,6 +2,7 @@
 import React, { useState } from "react" 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { api } from "@/convex/_generated/api";
 import { z } from "zod"
 import Link from 'next/link';
 import { Button } from "@/src/components/ui/button"
@@ -9,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card"
@@ -22,8 +22,6 @@ import {
     FormLabel,
     FormMessage,
   } from "@/src/components/ui/form"
-import { Input } from "@/src/components/ui/input"
-import { Label } from "@/src/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -33,6 +31,7 @@ import {
 } from "@/src/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { Checkbox } from "@/src/components/ui/checkbox";
+import { useAction } from "convex/react";
 
 export default function DashboardHomePage({}) {
     const genders = ['Male', 'Female', 'Prefer not to say']
@@ -41,6 +40,7 @@ export default function DashboardHomePage({}) {
 
     const [formSuccess, setFormSuccess] = useState(true)
     const [formSuccessMessage, setFormSuccessMessage] = useState("")
+    const getAllPrograms = useAction(api.openai.generateProgram);
 
     const formSchema = z.object({
         gender: z.string(),
@@ -48,6 +48,7 @@ export default function DashboardHomePage({}) {
         days: z.string().min(1, {
             message: "Please tell us how many days per week you want to workout",
         }),
+        weeks: z.string(),
         goals: z.string().min(2, {
             message: "Please tell us what you want to achieve",
         }),
@@ -62,6 +63,7 @@ export default function DashboardHomePage({}) {
         defaultValues: {
             gender: "",
             days: "",
+            weeks: "",
             age: "18",
             goals: "",
             experience: "",
@@ -69,12 +71,14 @@ export default function DashboardHomePage({}) {
         },
     })
    
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setFormSuccess(true)
         console.log(values)
+        const result = await getAllPrograms( values );
+        console.log(result)
     }
 
-    const createSelectElements= (start: number, end: number, extraText: String) => {
+    const createSelectElements = (start: number, end: number, extraText: String) => {
         var elements = [];
         for(let i = start; i < end + 1; i++){
             elements.push(<SelectItem key={i} value={i.toString()}>{i}{extraText && extraText}</SelectItem>);
@@ -139,8 +143,7 @@ export default function DashboardHomePage({}) {
                                             </SelectContent>
                                         </Select>
                                         <FormDescription>
-                                            You can manage email addresses in your{" "}
-                                            <Link href="/examples/forms">email settings</Link>.
+                                            Adding your age can help us finetune it more for you personally. 
                                         </FormDescription>
                                         <FormMessage />
                                         </FormItem>
@@ -172,7 +175,7 @@ export default function DashboardHomePage({}) {
                                     name="days"
                                     render={({ field }) => (
                                         <FormItem>
-                                        <FormLabel>How many days a week would you want to workout?</FormLabel>
+                                        <FormLabel>How many days a week would you want to workout? *</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                             <SelectTrigger>
@@ -191,13 +194,38 @@ export default function DashboardHomePage({}) {
                                     )}
                                     />
                                 </div>
+                                <div className="flex flex-col mt-4 gap-1">
+                                    <FormField
+                                    control={form.control}
+                                    name="weeks"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>How many days a week would you want to workout?</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select number of weeks" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                { createSelectElements(4, 12, ' weeks') }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormDescription>
+                                            The length of the program is very important, as this is a cycle that you can repeat. Always try to do the full length of a program, and afterwards take a deload week to let your body rest before starting again.
+                                        </FormDescription>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+                                </div>
                                 <div className="flex flex-col mt-1 gap-1">
                                     <FormField 
                                         control={form.control}
                                         name="goals"
                                         render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>What do you want to achieve?</FormLabel>
+                                            <FormLabel>What do you want to achieve? *</FormLabel>
                                             <FormControl>
                                                 <RadioGroup id="goals"   
                                                     onValueChange={field.onChange}
@@ -205,6 +233,9 @@ export default function DashboardHomePage({}) {
                                                     { createRadioElements(goals) }
                                                 </RadioGroup>
                                             </FormControl>
+                                            <FormDescription>
+                                                Selecting a goal is important, as this is what you will work towards. 
+                                            </FormDescription>
                                             <FormMessage />
                                         </FormItem>
                                         )}
@@ -216,7 +247,7 @@ export default function DashboardHomePage({}) {
                                         name="experience"
                                         render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Tell us how experienced you are!</FormLabel>
+                                            <FormLabel>Tell us how experienced you are! *</FormLabel>
                                             <FormControl>
                                                 <RadioGroup id="experience"   
                                                     onValueChange={field.onChange}
