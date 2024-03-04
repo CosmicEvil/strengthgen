@@ -1,15 +1,17 @@
 'use client';
-import React, { useState } from "react" 
+import React, { useState, useEffect } from "react" 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { api } from "@/convex/_generated/api";
 import { z } from "zod"
 import Link from 'next/link';
 import { Button } from "@/src/components/ui/button"
+import Loader from "@/src/components/ui/loader"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card"
@@ -33,13 +35,14 @@ import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { useAction } from "convex/react";
 
-export default function DashboardHomePage({}) {
+export default function DashboardHomePage() {
     const genders = ['Male', 'Female', 'Prefer not to say']
     const goals = ['Increase strength', 'Lose weight', 'Hypertrophy']
     const experience = ['Beginner', 'Intermediate', 'Advanced']
 
-    const [formSuccess, setFormSuccess] = useState(true)
-    const [formSuccessMessage, setFormSuccessMessage] = useState("")
+    const [formSuccess, setFormSuccess] = React.useState<boolean>(false)
+    const [isLoading, setLoading] = React.useState<boolean>(false)
+    const [formSuccessMessage, setFormSuccessMessage] = React.useState<String>("")
     const getAllPrograms = useAction(api.openai.generateProgram);
 
     const formSchema = z.object({
@@ -70,12 +73,16 @@ export default function DashboardHomePage({}) {
             bodyweight: false
         },
     })
-   
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        setFormSuccess(true)
-        console.log(values)
+        setLoading(true)
+
         const result = await getAllPrograms( values );
-        console.log(result)
+        if (result) {
+            setFormSuccess(true)
+            setFormSuccessMessage(result!)
+            setLoading(false)
+        }
     }
 
     const createSelectElements = (start: number, end: number, extraText: String) => {
@@ -105,16 +112,29 @@ export default function DashboardHomePage({}) {
         return elements;
     }
 
+    const refreshForm = () => {
+        setFormSuccess(false)
+        setFormSuccessMessage("")
+    }
+
     return (
         <div className="flex min-h-screen flex-col items-center gap-10 p-24">
-            {formSuccess ?
-                <div>
-                    {formSuccessMessage}
-                    <div className="flex">
-                        <button>Save this workout</button>
-                        <button onClick={setFormSuccess(false)}>Start again!</button>
-                    </div>
-                </div>
+            { isLoading ? 
+                <Loader />
+            :
+            (formSuccess == true) ?
+                <Card className="w-[500px]">
+                     <CardHeader>
+                        <CardTitle>Your Generated workout</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {formSuccessMessage}
+                    </CardContent>
+                    <CardFooter className="flex gap-4 items-center justify-center mt-20">
+                        <Button>Save this workout</Button>
+                        <Button onClick={refreshForm}>Start again!</Button>
+                    </CardFooter>
+                </Card>
                 :
                 <Card className="w-[500px]">
                     <CardHeader>

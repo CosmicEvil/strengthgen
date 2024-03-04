@@ -28,7 +28,7 @@ export const generateProgram = action({
                 "https://dashboard.convex.dev"
             );
         }
-        
+
         const gender = args.gender !== '' ? args.gender : 'person';
         const question = `
             Please generate me a workout schedule for a ${args.age !== '' ? args.age + ' years old' : '' } ${gender} who wants to ${args.goals} 
@@ -45,7 +45,7 @@ export const generateProgram = action({
                 messages: [{ role: "user", content: question + ". NEVER SAY YOU ARE AN AI LANGUAGE MODEL." }],
                 model: "gpt-3.5-turbo",
             });
-            console.log(chatCompletion) 
+            return chatCompletion.choices[0].message.content;
         } catch (e) {
             await console.log(e)
         }
