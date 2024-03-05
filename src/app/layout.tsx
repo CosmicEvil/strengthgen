@@ -4,7 +4,6 @@ import "./styles/globals.css";
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ClerkProvider } from '@clerk/nextjs'
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Strength Generation AI",
@@ -19,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-      <body className={inter.className}>
+      <body className="dark">
           <ConvexClientProvider>
             {children}
           </ConvexClientProvider>

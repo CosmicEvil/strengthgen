@@ -6,11 +6,11 @@ export default function Header() {
     const {userId} = auth();
 
     return (
-        <div className="flex w-[90%] h-10 mt-10 justify-between items-center font-sans text-slate-900 dark:text-white">
+        <div className="flex w-full px-6 h-20 md:h-10 mt-10 justify-between items-center font-sans text-slate-900 dark:text-white">
             <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
             { userId ? (
-                <div className="flex w-30 justify-end items-center gap-4">   
-                    <Link href="/dashboard/programs" className="text-base">Your generated programs</Link>
+                <div className="flex w-30 flex-col-reverse sm:flex-row sm:justify-end items-center gap-1 sm:gap-4">   
+                    <Link href="/dashboard/programs" className="text-base text-center">Your generated programs</Link>
                     <UserButton />
                 </div>
             ) : (

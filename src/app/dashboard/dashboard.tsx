@@ -117,26 +117,39 @@ export default function DashboardHomePage() {
         setFormSuccessMessage("")
     }
 
+    const saveWorkout = () => {
+       // send to convex
+    }
+
     return (
-        <div className="flex min-h-screen flex-col items-center gap-10 p-24">
+        <div className="flex min-h-screen flex-col items-center gap-12 p-6 sm:pt-24 sm:pb-24">
+            <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
             { isLoading ? 
-                <Loader />
+                <>
+                    <CardHeader>
+                        <CardTitle>Loading please wait</CardTitle>
+                        <CardDescription>This can take up to a minute.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="min-h-[400px] flex items-center justify-center">
+                        <Loader />
+                    </CardContent>
+                </>
             :
             (formSuccess == true) ?
-                <Card className="w-[500px]">
-                     <CardHeader>
+                <>
+                    <CardHeader>
                         <CardTitle>Your Generated workout</CardTitle>
                     </CardHeader>
                     <CardContent>
                         {formSuccessMessage}
                     </CardContent>
-                    <CardFooter className="flex gap-4 items-center justify-center mt-20">
-                        <Button>Save this workout</Button>
-                        <Button onClick={refreshForm}>Start again!</Button>
+                    <CardFooter className="flex gap-6 items-center justify-center mt-20">
+                        <Button variant="secondary" onClick={refreshForm}>Start again!</Button>
+                        <Button onClick={saveWorkout} className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">Save this workout</Button>
                     </CardFooter>
-                </Card>
+                </>
                 :
-                <Card className="w-[500px]">
+                <>
                     <CardHeader>
                         <CardTitle>Generate a new workout schedule!</CardTitle>
                         <CardDescription>Give the machine some information so it can create a tailor made program</CardDescription>
@@ -191,9 +204,9 @@ export default function DashboardHomePage() {
                                 </div>
                                 <div className="flex flex-col mt-4 gap-1">
                                     <FormField
-                                    control={form.control}
-                                    name="days"
-                                    render={({ field }) => (
+                                        control={form.control}
+                                        name="days"
+                                        render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>How many days a week would you want to workout? *</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -216,9 +229,9 @@ export default function DashboardHomePage() {
                                 </div>
                                 <div className="flex flex-col mt-4 gap-1">
                                     <FormField
-                                    control={form.control}
-                                    name="weeks"
-                                    render={({ field }) => (
+                                        control={form.control}
+                                        name="weeks"
+                                        render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>How many days a week would you want to workout?</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -285,34 +298,34 @@ export default function DashboardHomePage() {
                                         control={form.control}
                                         name="bodyweight"
                                         render={({ field }) => (
-                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                                            <FormControl>
-                                                <Checkbox
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                                />
-                                            </FormControl>
-                                            <div className="space-y-1 leading-none">
-                                                <FormLabel>
-                                                    Only bodyweight exercises?
-                                                </FormLabel>
-                                                <FormDescription>
-                                                    When this is checked, we will only suggest exercises that don't use free weights or machines. This way you can have a schedule even if you don't have a gym nearby!
-                                                </FormDescription>
-                                            </div>
+                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 my-4 border-2 border-cyan-500 shadow-xl shadow-cyan-500/50">
+                                                <FormControl>
+                                                    <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    />
+                                                </FormControl>
+                                                <div className="space-y-1 leading-none">
+                                                    <FormLabel>
+                                                        Only bodyweight exercises?
+                                                    </FormLabel>
+                                                    <FormDescription>
+                                                        When this is checked, we will only suggest exercises that don't use free weights or machines. This way you can have a schedule even if you don't have a gym nearby!
+                                                    </FormDescription>
+                                                </div>
                                             </FormItem>
                                         )}
                                         />
                                 </div>
                             </div>
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">Submit</Button>
                         </form>
                     </Form>
                     </CardContent>
-                </Card>
+            </>
             }
-
-            <Button>
+            </Card>
+            <Button className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">
                 <Link href="./dashboard/programs">
                     Go to your generated programs
                 </Link>
