@@ -62,7 +62,7 @@ export function ProgramsHomepage(props: {
   return (
     <div suppressHydrationWarning={true} className="min-h-[100vh] w-full">
       <Toaster />
-      <div className="flex min-h-screen flex-col items-center gap-2 p-4 pb-10 sm:pt-24 sm:pb-24">
+      <div className="flex min-h-screen flex-col items-center gap-4 p-4 pb-10 sm:pt-24 sm:pb-24">
         { (allPrograms && allPrograms.length > 0) ?
           allPrograms.map((item, index) => (
             <Link

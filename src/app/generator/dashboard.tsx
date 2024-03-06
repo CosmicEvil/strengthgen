@@ -262,7 +262,7 @@ export default function DashboardHomePage() {
                                     )}
                                     />
                                 </div>
-                                <div className="flex flex-col mt-4 gap-1">
+                                {/* <div className="flex flex-col mt-4 gap-1">
                                     <FormField
                                         control={form.control}
                                         name="weeks"
@@ -286,7 +286,7 @@ export default function DashboardHomePage() {
                                         </FormItem>
                                     )}
                                     />
-                                </div>
+                                </div> */}
                                 <div className="flex flex-col mt-1 gap-1">
                                     <FormField 
                                         control={form.control}

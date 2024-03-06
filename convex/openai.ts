@@ -34,7 +34,7 @@ export const generateProgram = action({
             Please generate me a workout schedule for a ${args.age !== '' ? args.age + ' years old' : '' } ${gender} who wants to ${args.goals} 
             and work out ${args.days} days a week, who has ${args.experience} experience with working out
             and return me just the schedule itself and maybe some extra info at the end of it.  `
-        args.bodyweight && question + " Please use only exercises that do not use weights or machines for the workout schedule."
+        args.bodyweight && question + " Please explicitly only use calisthenics exercises for the schedule."
 
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
