@@ -26,7 +26,7 @@ export function ProgramsHomepage(props: {
   const deleteProgramMutation = useMutation(api.programs.deleteProgram);
   console.log(allPrograms)
 
-  const deleteProgram = async (id: Id<"programs">) => {
+  const deleteProgram = async (id: any) => {
     await deleteProgramMutation({
         id: id
     })
@@ -37,18 +37,19 @@ export function ProgramsHomepage(props: {
 
   const createTags = (options) => {
     let elements : any = [];
-    for (const [key, value] of Object.entries(options)) {
+
+    for (const key in options){
       if(key !== "_id" && key !== "_creationTime" && key !== "program" && key !== "userId" ) {
-        if (key == "bodyweight" && value == true) {
+        if (key == "bodyweight" && options[key] == true) {
           elements.push(
             <span key={key}>
-             <b>Bodyweight Exercises Only,</b>
+             <b>Bodyweight Exercises Only, </b>
             </span> 
           );
-        } else if (value !== "" && key !== "bodyweight" ) {
+        } else if (options[key] !== "" && key !== "bodyweight" ) {
           elements.push(
             <span key={key}>
-            {key}: <b>{value}. </b>
+            {key}: <b>{options[key]}. </b>
             </span> 
           );
         }
@@ -65,13 +66,15 @@ export function ProgramsHomepage(props: {
         { (allPrograms && allPrograms.length > 0) ?
           allPrograms.map((item, index) => (
             <Link
-              href={`/dashboard/${item._id}/program`}
+              href={`/program/${item._id}`}
               key={index}
             >
             <Card key={index} className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[300px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
               <CardHeader>
                   <CardTitle>Your Generated workout</CardTitle>
-                  <CardDescription>Used parameters: { createTags(item) }</CardDescription>
+                  <CardDescription>Used parameters: 
+                  { createTags(item) }
+                  </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className='relative overflow-hidden h-[200px] '>

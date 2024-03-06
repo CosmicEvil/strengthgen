@@ -16,16 +16,18 @@ import {
 import { Button } from "@/src/components/ui/button"
 import { useRouter } from 'next/navigation'
 
-export function ChildPage(props: {
-    preloaded: Preloaded<typeof api.programs.getAllPrograms>;
-  }) {
+export default function ChildPage({
+  preloadedPrograms,
+}: {
+  preloadedPrograms: Preloaded<typeof api.programs.getSpecificProgram>;
+}) {
     const { toast } = useToast()
     const router = useRouter()
 
-    const program = usePreloadedQuery(props.preloaded);
+    const program = usePreloadedQuery(preloadedPrograms);
     const deleteProgramMutation = useMutation(api.programs.deleteProgram);
 
-    const deleteProgram = (id: Id<"programs">) => {
+    const deleteProgram = (id: any) => {
         deleteProgramMutation({
             id: id
         })
@@ -38,30 +40,29 @@ export function ChildPage(props: {
     }
 
     const createTags = (options) => {
-        let elements : any = [];
-        for (const [key, value] of Object.entries(options)) {
-     
-          if(key !== "_id" && key !== "_creationTime" && key !== "program" && key !== "userId" ) {
-            console.log(key)
-            console.log(value)
-            if (key == "bodyweight" && value == true) {
-              elements.push(
-                <span key={key}>
-                 <b>Bodyweight Exercises Only,</b>
-                </span> 
-              );
-            } else if (value !== "" && key !== "bodyweight" ) {
-              elements.push(
-                <span key={key} className='capitalize'>
-                {key}: <b>{value}. </b>
-                </span> 
-              );
-            }
+      let elements : any = [];
+  
+      for (const key in options){
+        if(key !== "_id" && key !== "_creationTime" && key !== "program" && key !== "userId" ) {
+          if (key == "bodyweight" && options[key] == true) {
+            elements.push(
+              <span key={key}>
+               <b>Bodyweight Exercises Only, </b>
+              </span> 
+            );
+          } else if (options[key] !== "" && key !== "bodyweight" ) {
+            elements.push(
+              <span key={key}>
+              {key}: <b>{options[key]}. </b>
+              </span> 
+            );
           }
         }
-    
-        return elements;
+      }
+  
+      return elements;
     }
+  
     
     if (!program) {
         notFound();

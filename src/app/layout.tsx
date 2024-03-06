@@ -18,7 +18,8 @@ export default function RootLayout({
       <body className="bg-gradient-to-br from-indigo-950 from-10% via-teal-900 via-70% to-fuchsia-700 ">
           <ConvexClientProvider>
             <Header />
-            {children}
+            <div className="mt-40 sm:mt-2">
+            {children}</div>
           </ConvexClientProvider>
         </body>
       </html>

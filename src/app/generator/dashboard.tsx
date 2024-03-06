@@ -47,7 +47,7 @@ export default function DashboardHomePage() {
     const [isSaved, setSaved] = useState<boolean>(false)
 
     const [formSuccessMessage, setFormSuccessMessage] = useState<string>("")
-    const [queryValues, setQueryValues] = useState<array>([])
+    const [queryValues, setQueryValues] = useState<any>([])
 
     const getAllPrograms = useAction(api.openai.generateProgram);
     const saveProgram = useMutation(api.programs.saveProgram);
@@ -95,7 +95,7 @@ export default function DashboardHomePage() {
     }
 
     const createSelectElements = (start: number, end: number, extraText: String) => {
-        var elements = [];
+        let elements : any = [];
         for(let i = start; i < end + 1; i++){
             elements.push(<SelectItem key={i} value={i.toString()}>{i}{extraText && extraText}</SelectItem>);
         }
@@ -154,7 +154,7 @@ export default function DashboardHomePage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center gap-12 p-4 pb-10 sm:pt-24 sm:pb-24">
+        <div className="flex min-h-screen flex-col items-start p-4 pb-10 sm:pt-24 sm:pb-24">
             <Toaster />
             <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
             { isLoading ? 

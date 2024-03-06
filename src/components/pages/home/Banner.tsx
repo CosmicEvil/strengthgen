@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { Button } from '@/src/components/ui/button'
+import Image from 'next/image';
+
 const Banner = () => {
   return (
-    <div className="relative min-h-[100vh] w-full px-4 md:h-[605px] md:px-6 lg:px-8 xl:px-10 2xl:px-0">
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <h1 className="inline-block text-center text-4xl font-medium tracking-tighter text-white lg:text-7xl">
+    <div className="relative mt-2 sm:mt-20 md:mt-2 min-h-[100vh] w-full px-4 sm:h-[605px] sm:px-6 lg:px-8 xl:px-10 2xl:px-0">
+      <div className="flex h-[80vh] sm:h-[100vh] w-full flex-col items-center justify-center">
+        <h1 className="inline-block mt-10 sm:mt-2 text-center text-4xl font-medium tracking-tighter text-white lg:text-7xl">
           Your machine powered<br /> <b>personal trainer.</b>
         </h1>
         <p className="mt-8 text-center text-xl font-light tracking-tight lg:text-3xl">
@@ -16,6 +18,15 @@ const Banner = () => {
               Get Started!
             </Link>
         </Button>
+        <div className="flex w-[120vw] md:w-[50vw] -mt-2 mdsm:-mt-10  items-center">
+          <Image
+              src="/images/desktop-2.png"
+              width={800}
+              height={500}
+              alt="laptop"
+              className="h-full w-full"
+            />
+        </div>
       </div>
      
     </div>
