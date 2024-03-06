@@ -12,12 +12,12 @@ export default function Header() {
                 <>
                     <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
                     <div className="flex gap-4 flex-row">
-                        <Button className="bg-purple-500 hover:bg-purple-700 text-white shadow-lg hover:shadow-md shadow-purple-500/50 hover:shadow-purple-500/50">
+                        <Button className="bg-purple-500 hover:bg-purple-300 text-white shadow-lg hover:shadow-md shadow-purple-500/50 hover:shadow-purple-500/50">
                             <Link href="/generator">
                                 Generate
                             </Link>
                         </Button>
-                        <Button className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
+                        <Button className="bg-cyan-500 hover:bg-cyan-300 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
                             <Link href="/dashboard">
                                 Your programs
                             </Link>
@@ -34,7 +34,7 @@ export default function Header() {
             ) : (
                 <>
                     <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
-                    <Button className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
+                    <Button className="bg-cyan-500 hover:bg-cyan-300 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
                         <Link href="/dashboard">
                             Log in!
                         </Link>

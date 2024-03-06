@@ -59,7 +59,6 @@ export default function DashboardHomePage() {
         days: z.string().min(1, {
             message: "Please tell us how many days per week you want to workout",
         }),
-        weeks: z.string(),
         goals: z.string().min(2, {
             message: "Please tell us what you want to achieve",
         }),
@@ -74,7 +73,6 @@ export default function DashboardHomePage() {
         defaultValues: {
             gender: "",
             days: "",
-            weeks: "",
             age: "18",
             goals: "",
             experience: "",
@@ -153,7 +151,7 @@ export default function DashboardHomePage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-start p-4 pb-10 sm:pt-24 sm:pb-24">
+        <div className="flex min-h-screen flex-col items-start px-4 pt-40 pb-10 sm:pt-24 sm:pb-24">
             <Toaster />
             <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
             { isLoading ? 
@@ -179,7 +177,7 @@ export default function DashboardHomePage() {
                     </CardContent>
                     <CardFooter className="flex gap-6 items-center justify-center mt-20">
                         <Button variant="secondary" onClick={refreshForm}>Start again!</Button>
-                        <Button onClick={saveWorkout} className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg shadow-cyan-500/50">Save this workout</Button>
+                        <Button onClick={saveWorkout} className="bg-cyan-500 hover:bg-cyan-300 text-white shadow-lg shadow-cyan-500/50">Save this workout</Button>
                     </CardFooter>
                 </>
                 :
@@ -261,31 +259,6 @@ export default function DashboardHomePage() {
                                     )}
                                     />
                                 </div>
-                                {/* <div className="flex flex-col mt-4 gap-1">
-                                    <FormField
-                                        control={form.control}
-                                        name="weeks"
-                                        render={({ field }) => (
-                                        <FormItem>
-                                        <FormLabel>How many days a week would you want to workout?</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select number of weeks" />
-                                            </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                { createSelectElements(4, 12, ' weeks') }
-                                            </SelectContent>
-                                        </Select>
-                                        <FormDescription>
-                                            The length of the program is very important, as this is a cycle that you can repeat. Always try to do the full length of a program, and afterwards take a deload week to let your body rest before starting again.
-                                        </FormDescription>
-                                        <FormMessage />
-                                        </FormItem>
-                                    )}
-                                    />
-                                </div> */}
                                 <div className="flex flex-col mt-1 gap-1">
                                     <FormField 
                                         control={form.control}
@@ -352,7 +325,7 @@ export default function DashboardHomePage() {
                                         />
                                 </div>
                             </div>
-                            <Button type="submit" className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg shadow-cyan-500/50">Submit</Button>
+                            <Button type="submit" className="bg-cyan-500 hover:bg-cyan-300 text-white shadow-lg shadow-cyan-500/50">Submit</Button>
                         </form>
                     </Form>
                     </CardContent>

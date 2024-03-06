@@ -71,7 +71,7 @@ export default function ChildPage({
     return (
         <div suppressHydrationWarning={true} className="min-h-[100vh] w-full">
             <Toaster />
-            <div className="flex min-h-screen flex-col items-center gap-2 p-4 pb-10 sm:pt-24 sm:pb-24">
+            <div className="flex min-h-screen flex-col items-center gap-2 px-4 pt-40 pb-10 sm:pt-24 sm:pb-24">
                 <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
                     <CardHeader>
                         <CardTitle>Your Generated workout</CardTitle>
@@ -83,7 +83,7 @@ export default function ChildPage({
                         />
                     </CardContent>
                     <CardFooter className="flex gap-6 items-end justify-end">
-                        <Button onClick={(e) => deleteProgram(program._id)} className="bg-red-500 hover:bg-red-700 text-white">Delete this workout</Button>
+                        <Button onClick={(e) => deleteProgram(program._id)} className="bg-red-500 hover:bg-red-300 text-white">Delete this workout</Button>
                     </CardFooter>
                 </Card>
             </div>

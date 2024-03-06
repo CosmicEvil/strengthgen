@@ -61,17 +61,14 @@ export function ProgramsHomepage(props: {
   return (
     <div suppressHydrationWarning={true} className="min-h-[100vh] w-full">
       <Toaster />
-      <div className="flex min-h-screen flex-col items-center gap-4 p-4 pb-10 sm:pt-24 sm:pb-24">
+      <div className="flex min-h-screen flex-col items-center gap-4 px-4 pt-40 pb-10 sm:pt-24 sm:pb-24">
         { (allPrograms && allPrograms.length > 0) ?
           allPrograms.map((item, index) => (
-            <Link
-              href={`/program/${item._id}`}
-              key={index}
-            >
+            
             <Card key={index} className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[300px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
               <CardHeader>
-                  <CardTitle>Your Generated workout</CardTitle>
-                  <CardDescription>Used parameters: 
+                  <CardTitle>Workout</CardTitle>
+                  <CardDescription>Used parameters: <br/>
                   { createTags(item) }
                   </CardDescription>
               </CardHeader>
@@ -84,11 +81,18 @@ export function ProgramsHomepage(props: {
                 </div>
                   
               </CardContent>
-              <CardFooter className="flex pb-0 gap-6 items-end justify-end">
-                  <Button onClick={(e) => deleteProgram(item._id)} className="bg-red-500 hover:bg-red-700 text-white">Delete this workout</Button>
+              <CardFooter className="flex pb-0 gap-6 items-end justify-between">
+              
+                <Button onClick={(e) => deleteProgram(item._id)} className="bg-red-500 hover:bg-red-300 text-white">Delete</Button>
+                <Link
+                  href={`/program/${item._id}`}
+                  key={index}
+                >
+                  <Button  className="bg-cyan-500 hover:bg-cyan-300 text-white">See full Workout</Button>
+                </Link>
               </CardFooter>
             </Card>
-          </Link>
+            
           ))
         : 
           <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
@@ -99,7 +103,7 @@ export function ProgramsHomepage(props: {
                 To generate some, go to the main page to generate some!
             </CardContent>
             <CardFooter className="flex gap-6 items-end justify-end"> 
-                <Button className="bg-purple-500 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/50">
+                <Button className="bg-purple-500 hover:bg-purple-300 text-white shadow-lg shadow-purple-500/50">
                   <Link href="/generator">
                     Generate!
                   </Link>

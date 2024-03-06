@@ -14,7 +14,6 @@ export const generateProgram = action({
     args: {
         gender: v.string(),
         days: v.string(),
-        weeks: v.string(),
         age: v.string(),
         goals: v.string(),
         experience: v.string(),
@@ -30,12 +29,13 @@ export const generateProgram = action({
         }
 
         const gender = args.gender !== '' ? args.gender : 'person';
-        const question = `
+        let question = `
             Please generate me a workout schedule for a ${args.age !== '' ? args.age + ' years old' : '' } ${gender} who wants to ${args.goals} 
             and work out ${args.days} days a week, who has ${args.experience} experience with working out
             and return me just the schedule itself and maybe some extra info at the end of it.  `
-        args.bodyweight && question + " Please explicitly only use calisthenics exercises for the schedule."
-
+        // args.weeks && (question = question + ` Please make this a schedule for a duration of ${args.weeks} weeks, with different workouts and amounts of reps for each week.`)
+        args.bodyweight && (question = question + " Please explicitly only use calisthenics exercises for the schedule. But also provide amounts of sets and reps for this.")
+        
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
         });
