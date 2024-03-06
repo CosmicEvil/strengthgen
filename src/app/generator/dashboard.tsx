@@ -130,7 +130,6 @@ export default function DashboardHomePage() {
 
     const saveWorkout = async () => {
         if(isSaved) {
-            console.log("already saved")
             toast({
                 variant: "destructive",
                 title: "This workout was already saved!",

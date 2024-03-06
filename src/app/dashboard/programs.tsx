@@ -24,7 +24,6 @@ export function ProgramsHomepage(props: {
   const { toast } = useToast()
 
   const deleteProgramMutation = useMutation(api.programs.deleteProgram);
-  console.log(allPrograms)
 
   const deleteProgram = async (id: any) => {
     await deleteProgramMutation({
