@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./styles/globals.css";
 import ConvexClientProvider from "./ConvexClientProvider";
-import { ClerkProvider } from '@clerk/nextjs'
-
+import Header from '@/src/components/ui/Header';
 
 export const metadata: Metadata = {
   title: "Strength Generation AI",
@@ -16,14 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
       <html lang="en">
-      <body className="dark">
+      <body className="bg-gradient-to-br from-indigo-950 from-10% via-teal-900 via-70% to-fuchsia-700 ">
           <ConvexClientProvider>
+            <Header />
             {children}
           </ConvexClientProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }

@@ -4,8 +4,7 @@ import Devices from '@/src/components/pages/home/Devices';
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-between items-center font-sans text-slate-900 dark:text-white">
-      <Header />
+    <div className="flex flex-col h-full justify-between items-center font-sans text-white text-white">
       <Banner />
       <Devices />
     </div>

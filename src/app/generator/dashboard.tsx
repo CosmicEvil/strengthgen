@@ -1,10 +1,9 @@
 'use client';
-import React, { useState, useEffect } from "react" 
+import React, { useState } from "react" 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { api } from "@/convex/_generated/api";
 import { z } from "zod"
-import Link from 'next/link';
 import { Button } from "@/src/components/ui/button"
 import Loader from "@/src/components/ui/loader"
 import {
@@ -33,17 +32,26 @@ import {
 } from "@/src/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { Checkbox } from "@/src/components/ui/checkbox";
-import { useAction } from "convex/react";
+import { useAction, useMutation } from "convex/react";
+import MarkdownView from 'react-showdown';
+import { useToast } from "@/src/components/ui/use-toast"
+import { Toaster } from "@/src/components/ui/toaster"
 
 export default function DashboardHomePage() {
     const genders = ['Male', 'Female', 'Prefer not to say']
     const goals = ['Increase strength', 'Lose weight', 'Hypertrophy']
     const experience = ['Beginner', 'Intermediate', 'Advanced']
 
-    const [formSuccess, setFormSuccess] = React.useState<boolean>(false)
-    const [isLoading, setLoading] = React.useState<boolean>(false)
-    const [formSuccessMessage, setFormSuccessMessage] = React.useState<String>("")
+    const [formSuccess, setFormSuccess] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isSaved, setSaved] = useState<boolean>(false)
+
+    const [formSuccessMessage, setFormSuccessMessage] = useState<string>("")
+    const [queryValues, setQueryValues] = useState<array>([])
+
     const getAllPrograms = useAction(api.openai.generateProgram);
+    const saveProgram = useMutation(api.programs.saveProgram);
+    const { toast } = useToast()
 
     const formSchema = z.object({
         gender: z.string(),
@@ -79,6 +87,7 @@ export default function DashboardHomePage() {
 
         const result = await getAllPrograms( values );
         if (result) {
+            setQueryValues(values)
             setFormSuccess(true)
             setFormSuccessMessage(result!)
             setLoading(false)
@@ -115,19 +124,42 @@ export default function DashboardHomePage() {
     const refreshForm = () => {
         setFormSuccess(false)
         setFormSuccessMessage("")
+        setQueryValues([])
     }
 
-    const saveWorkout = () => {
-       // send to convex
+    const saveWorkout = async () => {
+        if(isSaved) {
+            console.log("already saved")
+            toast({
+                variant: "destructive",
+                title: "This workout was already saved!",
+                description: "Find it again in your generated workouts!",
+            })
+      
+            return 
+        }
+        await saveProgram({
+            program: formSuccessMessage, 
+            days: queryValues.days, 
+            goals: queryValues.goals,
+            experience: queryValues.experience,
+            bodyweight: queryValues.bodyweight
+        })
+        setSaved(true)
+        toast({
+            title: "Saved!",
+            description: "You will be able to find your workout again in your generated workouts!"
+        })
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center gap-12 p-6 sm:pt-24 sm:pb-24">
+        <div className="flex min-h-screen flex-col items-center gap-12 p-4 pb-10 sm:pt-24 sm:pb-24">
+            <Toaster />
             <Card className="sm:w-[540px] md:w-[750px] px-4 py-8 min-h-[500px] border-solid border-2 border-cyan-500 shadow-xl shadow-cyan-500/90">
             { isLoading ? 
                 <>
                     <CardHeader>
-                        <CardTitle>Loading please wait</CardTitle>
+                        <CardTitle className="text-xl">Please wait while we do the calculations</CardTitle>
                         <CardDescription>This can take up to a minute.</CardDescription>
                     </CardHeader>
                     <CardContent className="min-h-[400px] flex items-center justify-center">
@@ -141,7 +173,9 @@ export default function DashboardHomePage() {
                         <CardTitle>Your Generated workout</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {formSuccessMessage}
+                        <MarkdownView className="markdown"
+                            markdown={formSuccessMessage}
+                        />
                     </CardContent>
                     <CardFooter className="flex gap-6 items-center justify-center mt-20">
                         <Button variant="secondary" onClick={refreshForm}>Start again!</Button>
@@ -318,18 +352,13 @@ export default function DashboardHomePage() {
                                         />
                                 </div>
                             </div>
-                            <Button type="submit" className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">Submit</Button>
+                            <Button type="submit" className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg shadow-cyan-500/50">Submit</Button>
                         </form>
                     </Form>
                     </CardContent>
             </>
             }
             </Card>
-            <Button className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">
-                <Link href="./dashboard/programs">
-                    Go to your generated programs
-                </Link>
-            </Button>
         </div>
     );
 }

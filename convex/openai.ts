@@ -33,8 +33,8 @@ export const generateProgram = action({
         const question = `
             Please generate me a workout schedule for a ${args.age !== '' ? args.age + ' years old' : '' } ${gender} who wants to ${args.goals} 
             and work out ${args.days} days a week, who has ${args.experience} experience with working out
-            and return me just the schedule itself and maybe some extra info at the end of it. `
-        args.bodyweight && question + " Please use only bodyweight exercises for the workout schedule."
+            and return me just the schedule itself and maybe some extra info at the end of it.  `
+        args.bodyweight && question + " Please use only exercises that do not use weights or machines for the workout schedule."
 
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
@@ -42,7 +42,7 @@ export const generateProgram = action({
         
         try {
             const chatCompletion = await openai.chat.completions.create({
-                messages: [{ role: "user", content: question + ". NEVER SAY YOU ARE AN AI LANGUAGE MODEL." }],
+                messages: [{ role: "user", content: question + " Please return the answer as markdown, where every day is a h4 tag, and all the exercises are part of a ul tag, the additional tips are h3 tags. NEVER SAY YOU ARE AN AI LANGUAGE MODEL." }],
                 model: "gpt-3.5-turbo",
             });
             return chatCompletion.choices[0].message.content;

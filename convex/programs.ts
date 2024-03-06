@@ -1,43 +1,62 @@
 import {queryWithUser, mutationWithUser} from "./utils"
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
 
 // Return all the programs that have been generated for the current user
 export const getAllPrograms = queryWithUser({
-  args: {limit: v.number()},
+  args: {limit: v.optional(v.number())},
   handler: async (ctx, args) => {
     const userId = ctx.userId;
-    args.limit === 0 ? args.limit = 999 : '';
+    const limit = args.limit ? args.limit : 999;
     const programs = await ctx.db
         .query("programs")
-        .filter((q) => q.eq(q.field("user"), userId))
+        .filter((q) => q.eq(q.field("userId"), userId))
         .order("desc")
-        .take(args.limit)
+        .take(limit)
     return programs
+  },
+});
+
+export const getSpecificProgram = queryWithUser({
+  args: { programId: v.id("programs") },
+  handler: async (ctx, args) => {
+    console.log(args.programId)
+    const program = await ctx.db.get(args.programId);
+    return program
+  },
+});
+
+export const deleteProgram = mutationWithUser({
+  args: {id: v.id('programs')},
+  handler: async (ctx, args) => {
+    const { id } = args;
+    const existing = await ctx.db.get(id);
+    if (existing) {
+      if (existing.userId !== ctx.userId) {
+        throw new ConvexError('Not your action item');
+      }
+      await ctx.db.delete(id);
+    }
   },
 });
 
 export const saveProgram = mutationWithUser({
   args: {
-    storageId: v.id('_storage'),
+    program: v.string(),
+    goals: v.optional(v.string()),
+    days: v.optional(v.string()),
+    experience: v.optional(v.string()),
+    bodyweight: v.optional(v.boolean())
   },
-  handler: async (ctx, { storageId }) => {
+  handler: async (ctx, { ...args }) => {
     const userId = ctx.userId;
-    let fileUrl = (await ctx.storage.getUrl(storageId)) as string;
-
-    const noteId = await ctx.db.insert('notes', {
-      userId,
-      audioFileId: storageId,
-      audioFileUrl: fileUrl,
-      generatingTranscript: true,
-      generatingTitle: true,
-      generatingActionItems: true,
+    const programs = await ctx.db.insert("programs", { 
+      program: args.program,
+      userId: userId,
+      days: args.days,
+      goals: args.goals,
+      experience: args.experience,
+      bodyweight: args.bodyweight,
     });
-
-    // // await ctx.scheduler.runAfter(0, internal.whisper.chat, {
-    // //   fileUrl,
-    // //   id: noteId,
-    // // });
-
-    return noteId;
+    return programs
   },
 });

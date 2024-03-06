@@ -1,24 +1,47 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from 'next/link'
 import { auth } from '@clerk/nextjs';
+import { Button } from "./button";
 
 export default function Header() {
-    const {userId} = auth();
-
+    const { userId } = auth();
+    
     return (
-        <div className="flex w-full px-6 h-20 md:h-10 mt-10 justify-between items-center font-sans text-slate-900 dark:text-white">
-            <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
+        <>
             { userId ? (
-                <div className="flex w-30 flex-col-reverse sm:flex-row sm:justify-end items-center gap-1 sm:gap-4">   
-                    <Link href="/dashboard/programs" className="text-base text-center">Your generated programs</Link>
-                    <UserButton />
+                <div className="absolute flex w-full pl-4 sm:pl-6 pr-24 h-40 sm:h-20 pt-6  justify-between items-start sm:items-center font-sans text-white flex-col sm:flex-row gap-1 sm:gap-4">   
+                    <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
+                    <div className="flex gap-4 flex-col sm:flex-row">
+                        <Button className="bg-purple-500 hover:bg-purple-700 text-white shadow-lg hover:shadow-md shadow-purple-500/50 hover:shadow-purple-500/50">
+                            <Link href="/generator">
+                                Generate
+                            </Link>
+                        </Button>
+                        <Button className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
+                            <Link href="/dashboard">
+                                Your programs
+                            </Link>
+                        </Button>
+                    </div>
+                    <div className="absolute top-6 right-6 sm:top-7">
+                        <UserButton appearance={{
+                            elements: {
+                                avatarBox: "w-16 h-16 sm:w-12 sm:h-12 shadow-md shadow-cyan-500/50",
+                            },
+                        }} />
+                    </div>
                 </div>
             ) : (
-                <div className="flex w-30 justify-end items-center gap-4">   
-                    <Link href="/dashboard" className="flex h-10 items-center rounded-lg bg-purple-500 px-4 text-sm font-medium text-white transition-colors hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 active:bg-purple-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">Sign in!</Link>
+                <div className="flex w-full pl-4 sm:pl-6 pr-24 h-20 sm:h-10 pt-6 sm:pt-10 justify-between items-start sm:items-end font-sans text-white flex-col sm:flex-row gap-1 sm:gap-4">   
+                    <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
+                    <Button className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg hover:shadow-md shadow-cyan-500/50 hover:shadow-cyan-500/50">
+                        <Link href="/dashboard">
+                            Log in!
+                        </Link>
+                    </Button>
                 </div>
             )
             }
-        </div>
+        </>
     )
 }
