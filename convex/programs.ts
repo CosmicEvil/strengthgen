@@ -19,7 +19,6 @@ export const getAllPrograms = queryWithUser({
 export const getSpecificProgram = queryWithUser({
   args: { programId: v.id("programs") },
   handler: async (ctx, args) => {
-    console.log(args.programId)
     const program = await ctx.db.get(args.programId);
     return program
   },

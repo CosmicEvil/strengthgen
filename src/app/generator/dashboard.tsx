@@ -125,6 +125,7 @@ export default function DashboardHomePage() {
         setFormSuccess(false)
         setFormSuccessMessage("")
         setQueryValues([])
+        setSaved(false)
     }
 
     const saveWorkout = async () => {
@@ -179,7 +180,7 @@ export default function DashboardHomePage() {
                     </CardContent>
                     <CardFooter className="flex gap-6 items-center justify-center mt-20">
                         <Button variant="secondary" onClick={refreshForm}>Start again!</Button>
-                        <Button onClick={saveWorkout} className="bg-cyan-500 text-white shadow-lg shadow-cyan-500/50">Save this workout</Button>
+                        <Button onClick={saveWorkout} className="bg-cyan-500 hover:bg-cyan-700 text-white shadow-lg shadow-cyan-500/50">Save this workout</Button>
                     </CardFooter>
                 </>
                 :
