@@ -345,7 +345,7 @@ export default function DashboardHomePage() {
                                                         Only bodyweight exercises?
                                                     </FormLabel>
                                                     <FormDescription>
-                                                        When this is checked, we will only suggest exercises that don't use free weights or machines. This way you can have a schedule even if you don't have a gym nearby!
+                                                        When this is checked, we will only suggest exercises that don&apos;t use free weights or machines. This way you can have a schedule even if you don&apos;t have a gym nearby!
                                                     </FormDescription>
                                                 </div>
                                             </FormItem>
