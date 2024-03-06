@@ -9,7 +9,7 @@ export default function Header() {
     return (
         <>
             { userId ? (
-                <div className="absolute flex w-full pl-4 sm:pl-6 pr-24 h-40 sm:h-20 pt-6  justify-between items-start sm:items-center font-sans text-white flex-col sm:flex-row gap-1 sm:gap-4">   
+                <div className="absolute z-10 flex w-full pl-4 sm:pl-6 pr-24 h-40 sm:h-20 pt-6  justify-between items-start sm:items-center font-sans text-white flex-col sm:flex-row gap-1 sm:gap-4">   
                     <h1 className="text-xl font-extrabold">StrengthGen.Ai</h1>
                     <div className="flex gap-4 flex-col sm:flex-row">
                         <Button className="bg-purple-500 hover:bg-purple-700 text-white shadow-lg hover:shadow-md shadow-purple-500/50 hover:shadow-purple-500/50">
